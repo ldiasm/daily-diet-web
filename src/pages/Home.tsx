@@ -540,49 +540,47 @@ export default function Home() {
                             day.meals.map(meal => (
                               <div
                                 key={meal.id}
-                                className={`p-3 rounded ${meal.onDiet || meal.on_diet === 1 ? 'bg-green-900/30' : 'bg-red-900/30'} hover:bg-opacity-50 transition-colors group relative flex flex-col`}
+                                className={`p-0 rounded overflow-hidden ${meal.onDiet || meal.on_diet === 1 ? 'bg-green-900/30' : 'bg-red-900/30'} hover:bg-opacity-50 transition-colors group relative flex flex-col`}
                               >
-                                <div className="flex items-start justify-between mb-2">
-                                  <div className="min-w-0 flex-1 pr-2">
-                                    <div className="text-sm text-star-dust-200 font-medium leading-snug line-clamp-2">{meal.name}</div>
-                                  </div>
-                                  <div className={`text-xs px-1.5 rounded-sm font-medium flex items-center ${meal.onDiet || meal.on_diet === 1
-                                    ? 'bg-green-900/30 text-green-400'
-                                    : 'bg-amber-900/30 text-amber-400'
-                                    }`}>
-                                    {meal.onDiet || meal.on_diet === 1 ? (
-                                      <svg className="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                      </svg>
-                                    ) : (
-                                      <svg className="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                      </svg>
-                                    )}
-                                    <span>{meal.onDiet || meal.on_diet === 1 ? 'Ok' : 'Livre'}</span>
-                                  </div>
+                                <div className={`text-xs font-medium flex items-center justify-center w-full py-1 text-[10px] uppercase tracking-wide ${meal.onDiet || meal.on_diet === 1
+                                  ? 'bg-green-900/40 text-green-400'
+                                  : 'bg-amber-900/40 text-amber-400'
+                                  }`}>
+                                  {meal.onDiet || meal.on_diet === 1 ? (
+                                    <svg className="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                  ) : (
+                                    <svg className="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                  )}
+                                  <span>{meal.onDiet || meal.on_diet === 1 ? 'Ok' : 'Livre'}</span>
                                 </div>
 
-                                <div className="text-xs text-star-dust-400 line-clamp-2 mb-2">{meal.description}</div>
+                                <div className="flex-1 p-3">
+                                  <div className="text-sm text-star-dust-200 font-medium leading-snug line-clamp-2 mb-2">{meal.name}</div>
+                                  <div className="text-xs text-star-dust-400 line-clamp-2 mb-2">{meal.description}</div>
 
-                                <div className="flex items-center gap-3 text-xs text-star-dust-400">
-                                  <div className="flex items-center gap-1">
-                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                    {meal.time}
-                                  </div>
-                                  {meal.calories && (
+                                  <div className="flex items-center gap-3 text-xs text-star-dust-400">
                                     <div className="flex items-center gap-1">
                                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                       </svg>
-                                      {meal.calories} kcal
+                                      {meal.time}
                                     </div>
-                                  )}
+                                    {meal.calories && (
+                                      <div className="flex items-center gap-1">
+                                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                        </svg>
+                                        {meal.calories} kcal
+                                      </div>
+                                    )}
+                                  </div>
                                 </div>
 
-                                <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+                                <div className="px-3 pb-3 pt-2 border-t border-star-dust-700/30 w-full opacity-0 group-hover:opacity-100 transition-opacity flex justify-end gap-2">
                                   <button
                                     onClick={() => handleEditMeal(meal)}
                                     className="p-1 text-star-dust-400 hover:text-star-dust-200 transition-colors"
@@ -686,63 +684,61 @@ export default function Home() {
                             {mealsForDate
                               .sort((a, b) => a.time.localeCompare(b.time))
                               .map((meal) => (
-                                <div key={meal.id} className="p-4 hover:bg-star-dust-750 transition-colors">
-                                  <div className="flex justify-between items-start">
-                                    <div className="flex-1">
-                                      <div className="flex items-center gap-2">
-                                        <div className="text-star-dust-200 font-medium">{meal.name}</div>
-                                        <div className={`text-xs px-1.5 rounded-sm font-medium flex items-center ${meal.onDiet ? 'bg-green-900/30 text-green-400' : 'bg-amber-900/30 text-amber-400'
-                                          }`}>
-                                          {meal.onDiet ? (
-                                            <svg className="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                            </svg>
-                                          ) : (
-                                            <svg className="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                                            </svg>
-                                          )}
-                                          <span>{meal.onDiet ? 'Ok' : 'Livre'}</span>
-                                        </div>
+                                <div key={meal.id} className="p-0 hover:bg-star-dust-750 transition-colors group">
+                                  <div className={`text-xs font-medium flex items-center justify-center w-full py-1 text-[10px] uppercase tracking-wide ${meal.onDiet ? 'bg-green-900/40 text-green-400' : 'bg-amber-900/40 text-amber-400'
+                                    }`}>
+                                    {meal.onDiet ? (
+                                      <svg className="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                      </svg>
+                                    ) : (
+                                      <svg className="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                      </svg>
+                                    )}
+                                    <span>{meal.onDiet ? 'Ok' : 'Livre'}</span>
+                                  </div>
+
+                                  <div className="flex-1 p-4">
+                                    <div className="text-star-dust-200 font-medium mb-1">{meal.name}</div>
+                                    <p className="text-star-dust-400 text-sm mb-3">{meal.description}</p>
+                                    <div className="flex items-center gap-4 text-xs text-star-dust-400">
+                                      <div className="flex items-center gap-1">
+                                        <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        {meal.time}
                                       </div>
-                                      <p className="text-star-dust-400 text-sm mt-1">{meal.description}</p>
-                                      <div className="flex items-center gap-4 mt-2 text-xs text-star-dust-400">
+                                      {meal.calories && (
                                         <div className="flex items-center gap-1">
                                           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                           </svg>
-                                          {meal.time}
+                                          {meal.calories} kcal
                                         </div>
-                                        {meal.calories && (
-                                          <div className="flex items-center gap-1">
-                                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                                            </svg>
-                                            {meal.calories} kcal
-                                          </div>
-                                        )}
-                                      </div>
+                                      )}
                                     </div>
-                                    <div className="flex gap-2">
-                                      <button
-                                        onClick={() => handleEditMeal(meal)}
-                                        className="p-1 text-star-dust-400 hover:text-star-dust-200 transition-colors"
-                                        title="Editar refeição"
-                                      >
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                        </svg>
-                                      </button>
-                                      <button
-                                        onClick={() => handleDeleteMeal(meal)}
-                                        className="p-1 text-red-400 hover:text-red-300 transition-colors"
-                                        title="Excluir refeição"
-                                      >
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                      </button>
-                                    </div>
+                                  </div>
+
+                                  <div className="px-4 pb-3 pt-2 border-t border-star-dust-700/30 w-full opacity-0 group-hover:opacity-100 transition-opacity flex justify-end gap-2">
+                                    <button
+                                      onClick={() => handleEditMeal(meal)}
+                                      className="p-1 text-star-dust-400 hover:text-star-dust-200 transition-colors"
+                                      title="Editar refeição"
+                                    >
+                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                      </svg>
+                                    </button>
+                                    <button
+                                      onClick={() => handleDeleteMeal(meal)}
+                                      className="p-1 text-red-400 hover:text-red-300 transition-colors"
+                                      title="Excluir refeição"
+                                    >
+                                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                      </svg>
+                                    </button>
                                   </div>
                                 </div>
                               ))}
