@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { format, startOfWeek, addDays, isSameDay, addWeeks } from 'date-fns';
+import { format, startOfWeek, addDays, isSameDay, addWeeks, parse, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { generateWeeklyMeals } from '../utils/mockData';
 
@@ -129,14 +129,35 @@ export default function Home() {
 
   const handleEditMeal = (meal: Meal) => {
     setSelectedMeal(meal);
+    // Corrigir a conversão de data
+    try {
+      // A data vem em formato ISO como '2025-04-06T00:00:00.000Z'
+      // Primeiro extraímos apenas a parte da data
+      const dateOnly = meal.date.split('T')[0];
+      // Depois convertemos para um objeto Date usando parseISO
+      const mealDate = parseISO(dateOnly);
+      setSelectedDate(mealDate);
+
+      console.log('Data da refeição:', meal.date);
+      console.log('Data extraída:', dateOnly);
+      console.log('Data parseada:', mealDate);
+    } catch (error) {
+      console.error('Erro ao converter data:', error);
+      // Fallback manual se parseISO falhar
+      const [year, month, day] = meal.date.split('T')[0].split('-').map(Number);
+      const mealDate = new Date(year, month - 1, day);
+      setSelectedDate(mealDate);
+    }
+
     setNewMeal({
       name: meal.name,
       description: meal.description,
-      date: meal.date,
+      date: meal.date.split('T')[0], // Garantir que estamos usando apenas a data sem timezone
       time: meal.time,
       onDiet: meal.onDiet,
       calories: meal.calories || 0,
     });
+
     setShowAddMealModal(true);
   };
 
@@ -651,9 +672,8 @@ export default function Home() {
               {selectedMeal ? 'Editar Refeição' : 'Adicionar Refeição'}
             </h2>
             <p className="text-sm text-star-dust-300 mb-4">
-              {selectedMeal
-                ? `Data: ${format(new Date(selectedMeal.date), 'dd/MM/yyyy')}`
-                : `Data: ${format(selectedDate || new Date(), 'dd/MM/yyyy')} (${format(selectedDate || new Date(), 'EEEE', { locale: ptBR })})`}
+              Data: {selectedDate ? format(selectedDate, 'dd/MM/yyyy') : ''}
+              {selectedDate && `(${format(selectedDate, 'EEEE', { locale: ptBR })})`}
             </p>
             <form onSubmit={selectedMeal ? handleUpdateMeal : handleAddMeal} className="space-y-4">
               <div>
@@ -691,7 +711,22 @@ export default function Home() {
                     type="date"
                     id="date"
                     value={newMeal.date}
-                    onChange={(e) => setNewMeal(prev => ({ ...prev, date: e.target.value }))}
+                    onChange={(e) => {
+                      // Atualiza o state com a nova data
+                      setNewMeal(prev => ({ ...prev, date: e.target.value }));
+                      // Atualiza o selectedDate para refletir no header
+                      if (e.target.value) {
+                        try {
+                          // Usar parseISO para converter a string de data para objeto Date
+                          const newDate = parseISO(e.target.value);
+                          setSelectedDate(newDate);
+                        } catch (error) {
+                          console.error('Erro ao converter data:', error);
+                          // Fallback para o construtor nativo se parseISO falhar
+                          setSelectedDate(new Date(e.target.value));
+                        }
+                      }
+                    }}
                     className="w-full px-3 py-2 bg-star-dust-700 text-star-dust-100 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     max={format(new Date(), 'yyyy-MM-dd')}
                     required
