@@ -546,11 +546,11 @@ export default function Home() {
                                   <div className="min-w-0 flex-1 pr-2">
                                     <div className="text-sm text-star-dust-200 font-medium leading-snug line-clamp-2">{meal.name}</div>
                                   </div>
-                                  <div className={`text-xs px-1.5 py-0.5 rounded-sm ${meal.onDiet || meal.on_diet === 1
-                                    ? 'bg-green-900/60 text-green-300'
-                                    : 'bg-red-900/60 text-red-300'
+                                  <div className={`text-xs px-1.5 rounded-sm font-medium ${meal.onDiet || meal.on_diet === 1
+                                    ? 'bg-green-900/40 text-green-400'
+                                    : 'bg-red-900/40 text-red-400'
                                     }`}>
-                                    {meal.onDiet || meal.on_diet === 1 ? 'Na dieta' : 'Fora'}
+                                    {meal.onDiet || meal.on_diet === 1 ? '✓' : '✗'}
                                   </div>
                                 </div>
 
@@ -682,9 +682,9 @@ export default function Home() {
                                     <div className="flex-1">
                                       <div className="flex items-center gap-2">
                                         <div className="text-star-dust-200 font-medium">{meal.name}</div>
-                                        <div className={`text-xs px-1.5 py-0.5 rounded-sm ${meal.onDiet ? 'bg-green-900/60 text-green-300' : 'bg-red-900/60 text-red-300'
+                                        <div className={`text-xs px-1.5 rounded-sm font-medium ${meal.onDiet ? 'bg-green-900/40 text-green-400' : 'bg-red-900/40 text-red-400'
                                           }`}>
-                                          {meal.onDiet ? 'Na dieta' : 'Fora'}
+                                          {meal.onDiet ? '✓' : '✗'}
                                         </div>
                                       </div>
                                       <p className="text-star-dust-400 text-sm mt-1">{meal.description}</p>
@@ -845,15 +845,15 @@ export default function Home() {
                               <div className="mt-auto mb-1 flex flex-col gap-1 items-center">
                                 {onDietCount > 0 && (
                                   <div className="flex items-center gap-1">
-                                    <span className="text-xs bg-green-900/70 text-green-300 px-1 py-0.5 rounded-sm">
-                                      {onDietCount} na dieta
+                                    <span className="text-xs bg-green-900/40 text-green-400 px-1 rounded-sm">
+                                      {onDietCount}✓
                                     </span>
                                   </div>
                                 )}
                                 {offDietCount > 0 && (
                                   <div className="flex items-center gap-1">
-                                    <span className="text-xs bg-red-900/70 text-red-300 px-1 py-0.5 rounded-sm">
-                                      {offDietCount} fora
+                                    <span className="text-xs bg-red-900/40 text-red-400 px-1 rounded-sm">
+                                      {offDietCount}✗
                                     </span>
                                   </div>
                                 )}
@@ -867,10 +867,10 @@ export default function Home() {
 
                   <div className="flex justify-center gap-6 mt-4 text-xs text-star-dust-400">
                     <div className="flex items-center gap-1">
-                      <span className="px-1.5 py-0.5 bg-green-900/60 text-green-300 rounded-sm">Na dieta</span>
+                      <span className="px-1.5 py-0.5 bg-green-900/40 text-green-400 rounded-sm font-medium">✓ Adequado</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <span className="px-1.5 py-0.5 bg-red-900/60 text-red-300 rounded-sm">Fora da dieta</span>
+                      <span className="px-1.5 py-0.5 bg-red-900/40 text-red-400 rounded-sm font-medium">✗ Inadequado</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <div className="w-2 h-2 rounded-full bg-blue-500"></div>
