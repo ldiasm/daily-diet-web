@@ -108,38 +108,7 @@ export default function Home() {
         throw new Error('Failed to add meal');
       }
 
-      const data = await response.json();
-      const newMealData = data.meal;
-
-      // Atualiza o estado meals
-      setMeals(prevMeals => [...prevMeals, newMealData]);
-
-      // Atualiza o estado weeklyMeals
-      setWeeklyMeals(prevWeeklyMeals => {
-        const updatedWeeklyMeals = prevWeeklyMeals.map(day => {
-          const dayDate = format(day.date, 'yyyy-MM-dd');
-          const mealDate = newMealData.date.split('T')[0];
-
-          if (dayDate === mealDate) {
-            const updatedMeals = [...day.meals, newMealData].sort((a, b) => {
-              // Primeiro compara por data
-              const dateCompare = a.date.localeCompare(b.date);
-              if (dateCompare !== 0) return dateCompare;
-              // Se a data for igual, compara por hora
-              return a.time.localeCompare(b.time);
-            });
-
-            return {
-              ...day,
-              meals: updatedMeals
-            };
-          }
-          return day;
-        });
-
-        return updatedWeeklyMeals;
-      });
-
+      // Fecha o modal e limpa o formulário
       setShowAddMealModal(false);
       setNewMeal({
         name: '',
@@ -149,6 +118,9 @@ export default function Home() {
         onDiet: false,
         calories: undefined,
       });
+
+      // Recarrega todas as refeições para garantir que a lista esteja atualizada
+      await loadMealsForWeek();
     } catch (error) {
       console.error('Error adding meal:', error);
       alert('Erro ao adicionar refeição. Tente novamente.');
@@ -203,12 +175,15 @@ export default function Home() {
         throw new Error('Failed to update meal');
       }
 
-      const data = await response.json();
-      setMeals(meals.map((m) => (m.id === selectedMeal.id ? data.meal : m)));
+      // Fecha o modal e limpa a seleção
       setShowAddMealModal(false);
       setSelectedMeal(null);
+
+      // Recarrega todas as refeições para garantir que a lista esteja atualizada
+      await loadMealsForWeek();
     } catch (error) {
       console.error('Error updating meal:', error);
+      alert('Erro ao atualizar refeição. Tente novamente.');
     }
   };
 
@@ -224,17 +199,6 @@ export default function Home() {
         throw new Error('Erro ao deletar refeição');
       }
 
-      // Remove do estado de meals
-      setMeals(prevMeals => prevMeals.filter(m => m.id !== meal.id));
-
-      // Remove do estado de weeklyMeals
-      setWeeklyMeals(prevWeeklyMeals =>
-        prevWeeklyMeals.map(day => ({
-          ...day,
-          meals: day.meals.filter(m => m.id !== meal.id)
-        }))
-      );
-
       // Adiciona ao histórico local
       setModificationHistory(prev => [...prev, {
         id: crypto.randomUUID(),
@@ -242,6 +206,9 @@ export default function Home() {
         meal,
         timestamp: new Date()
       }]);
+
+      // Recarrega todas as refeições para garantir que a lista esteja atualizada
+      await loadMealsForWeek();
     } catch (error) {
       console.error('Erro ao deletar refeição:', error);
       alert('Erro ao deletar refeição. Tente novamente.');
@@ -277,6 +244,15 @@ export default function Home() {
 
       const data = await response.json();
 
+      // Verifica se data.meals é um array
+      if (!data.meals || !Array.isArray(data.meals)) {
+        console.error('Formato de dados inválido recebido da API:', data);
+        setMeals([]);
+        setWeeklyMeals([]);
+        setLoading(false);
+        return;
+      }
+
       // Mapeia as refeições para garantir que onDiet esteja definido corretamente
       const mappedMeals = data.meals.map((meal: any) => ({
         ...meal,
@@ -296,16 +272,27 @@ export default function Home() {
 
         // Filtra as refeições para este dia - converte a data da API para o formato correto
         const mealsForDay = mappedMeals.filter((meal: any) => {
-          // A data da API vem no formato "2025-04-08T00:00:00.000Z"
-          // Precisamos converter para "2025-04-08" para comparação
-          const mealDate = meal.date.split('T')[0];
-          return mealDate === formattedDate;
+          // Verifica se o objeto meal e sua propriedade date existem
+          if (!meal || !meal.date) return false;
+          try {
+            // A data da API vem no formato "2025-04-08T00:00:00.000Z"
+            // Precisamos converter para "2025-04-08" para comparação
+            const mealDate = meal.date.split('T')[0];
+            return mealDate === formattedDate;
+          } catch (error) {
+            console.error('Erro ao processar data da refeição:', error, meal);
+            return false;
+          }
         });
 
         return {
           date,
           formattedDate,
-          meals: mealsForDay.sort((a: any, b: any) => a.time.localeCompare(b.time)),
+          meals: mealsForDay.sort((a: any, b: any) => {
+            // Verifica se as propriedades time existem antes de usar localeCompare
+            if (!a.time || !b.time) return 0;
+            return a.time.localeCompare(b.time);
+          }),
         };
       });
 
