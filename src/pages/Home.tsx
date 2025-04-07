@@ -533,19 +533,20 @@ export default function Home() {
                     </button>
                   </div>
                 </div>
-                <div className="grid grid-cols-7 gap-4 px-1">
+                <div className="grid grid-cols-7 gap-10 px-1">
                   {weeklyMeals.map((day, index) => {
                     const date = day.date;
                     const formattedDayDate = format(date, 'yyyy-MM-dd');
+                    const isToday = isSameDay(date, new Date());
 
                     return (
-                      <div key={index} className="bg-star-dust-800 p-4 rounded-lg min-h-[280px] flex flex-col w-[calc(100%+10%)] -mx-2">
+                      <div key={index} className={`bg-star-dust-800 p-4 rounded-lg min-h-[280px] flex flex-col w-[calc(100%+20%)] -mx-4 ${isToday ? 'border-2 border-star-dust-400' : ''}`}>
                         <div className="text-center text-star-dust-300 mb-4 pb-2 border-b border-star-dust-700">
                           <span className="text-lg font-medium">{format(date, 'EEE', { locale: ptBR })}</span>
                           <br />
                           <span className="text-sm">{format(date, 'dd/MM')}</span>
                         </div>
-                        <div className="flex-1 space-y-3 overflow-y-auto max-h-[calc(100vh-400px)] pr-1">
+                        <div className="flex-1 space-y-4 overflow-y-auto max-h-[calc(100vh-400px)] pr-1">
                           {day.meals.length > 0 ? (
                             day.meals.map(meal => (
                               <div

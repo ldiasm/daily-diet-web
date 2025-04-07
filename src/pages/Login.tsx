@@ -15,10 +15,14 @@ export default function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (user && !isLoading) {
-      navigate('/');
+    if (user && !isLoading && !isSubmitting) {
+      const timer = setTimeout(() => {
+        navigate('/home', { replace: true });
+      }, 100);
+
+      return () => clearTimeout(timer);
     }
-  }, [user, isLoading, navigate]);
+  }, [user, isLoading, isSubmitting, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,14 +42,6 @@ export default function Login() {
       } else {
         await signIn({ email, password });
       }
-
-      // Aguardar até que os dados do usuário estejam carregados
-      if (!user) {
-        // Se o usuário ainda não estiver carregado, aguardar um pouco mais
-        await new Promise(resolve => setTimeout(resolve, 1000));
-      }
-
-      navigate('/');
     } catch (err: any) {
       if (err.response?.data?.message) {
         setError(err.response.data.message);
@@ -58,7 +54,9 @@ export default function Login() {
         );
       }
     } finally {
-      setIsSubmitting(false);
+      setTimeout(() => {
+        setIsSubmitting(false);
+      }, 500);
     }
   };
 
@@ -127,6 +125,7 @@ export default function Login() {
                 name="email"
                 type="email"
                 required
+                autoComplete="username"
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-star-dust-700 placeholder-star-dust-500 text-star-dust-50 rounded-t-md focus:outline-none focus:ring-star-dust-500 focus:border-star-dust-500 focus:z-10 sm:text-sm bg-star-dust-800"
                 placeholder="Email"
                 value={email}
@@ -142,6 +141,7 @@ export default function Login() {
                 name="password"
                 type="password"
                 required
+                autoComplete="current-password"
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-star-dust-700 placeholder-star-dust-500 text-star-dust-50 focus:outline-none focus:ring-star-dust-500 focus:border-star-dust-500 focus:z-10 sm:text-sm bg-star-dust-800"
                 placeholder="Senha"
                 value={password}
@@ -159,6 +159,7 @@ export default function Login() {
                     name="firstName"
                     type="text"
                     required
+                    autoComplete="given-name"
                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-star-dust-700 placeholder-star-dust-500 text-star-dust-50 focus:outline-none focus:ring-star-dust-500 focus:border-star-dust-500 focus:z-10 sm:text-sm bg-star-dust-800"
                     placeholder="Nome"
                     value={firstName}
@@ -174,6 +175,7 @@ export default function Login() {
                     name="lastName"
                     type="text"
                     required
+                    autoComplete="family-name"
                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-star-dust-700 placeholder-star-dust-500 text-star-dust-50 focus:outline-none focus:ring-star-dust-500 focus:border-star-dust-500 focus:z-10 sm:text-sm bg-star-dust-800"
                     placeholder="Sobrenome"
                     value={lastName}
@@ -188,6 +190,7 @@ export default function Login() {
                     id="photoUrl"
                     name="photoUrl"
                     type="url"
+                    autoComplete="photo"
                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-star-dust-700 placeholder-star-dust-500 text-star-dust-50 rounded-b-md focus:outline-none focus:ring-star-dust-500 focus:border-star-dust-500 focus:z-10 sm:text-sm bg-star-dust-800"
                     placeholder="URL da Foto (opcional)"
                     value={photoUrl}
