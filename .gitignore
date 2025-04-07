@@ -30,3 +30,14 @@ dist-ssr
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Package manager files
+package-lock.json
+yarn.lock.bkp
