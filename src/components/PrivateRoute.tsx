@@ -1,14 +1,14 @@
 import { Navigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 interface PrivateRouteProps {
   children: React.ReactNode;
 }
 
 export function PrivateRoute({ children }: PrivateRouteProps) {
-  // TODO: Implementar verificação real de autenticação
-  const isAuthenticated = false;
+  const { user } = useAuth();
 
-  if (!isAuthenticated) {
+  if (!user) {
     return <Navigate to="/login" replace />;
   }
 

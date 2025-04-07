@@ -1,54 +1,23 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
+import { Routes as RouterRoutes, Route, Navigate, Outlet } from 'react-router-dom';
 import { PrivateRoute } from '../components/PrivateRoute';
+import Home from '../pages/Home';
+import Login from '../pages/Login';
+import Meals from '../pages/Meals';
+import Profile from '../pages/Profile';
+import NotFound from '../pages/NotFound';
 
-// Lazy loading das páginas
-const Login = lazy(() => import('../pages/Login'));
-const Home = lazy(() => import('../pages/Home'));
-const Meals = lazy(() => import('../pages/Meals'));
-const Profile = lazy(() => import('../pages/Profile'));
-const NotFound = lazy(() => import('../pages/NotFound'));
-
-// Componente de loading
-const Loading = () => (
-  <div className="flex items-center justify-center min-h-screen">
-    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-  </div>
-);
-
-export function AppRoutes() {
+export function Routes() {
   return (
-    <Suspense fallback={<Loading />}>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route
-          path="/home"
-          element={
-            <PrivateRoute>
-              <Home />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/meals"
-          element={
-            <PrivateRoute>
-              <Meals />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <PrivateRoute>
-              <Profile />
-            </PrivateRoute>
-          }
-        />
-        <Route path="/404" element={<NotFound />} />
-        <Route path="*" element={<Navigate to="/404" replace />} />
-      </Routes>
-    </Suspense>
+    <RouterRoutes>
+      <Route path="/login" element={<Login />} />
+
+      <Route element={<PrivateRoute><Outlet /></PrivateRoute>}>
+        <Route index element={<Home />} />
+        <Route path="meals" element={<Meals />} />
+        <Route path="profile" element={<Profile />} />
+      </Route>
+
+      <Route path="*" element={<NotFound />} />
+    </RouterRoutes>
   );
 }

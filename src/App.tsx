@@ -1,9 +1,13 @@
-import { AppRoutes } from './routes';
+import { AuthProvider } from './contexts/AuthContext';
+import { Routes } from './routes';
+import './App.css';
 
-export default function App() {
+function App() {
   return (
-    <div className="min-h-screen w-full bg-star-dust-950">
-      <AppRoutes />
-    </div>
+    <AuthProvider>
+      <Routes />
+    </AuthProvider>
   );
 }
+
+export default App;
