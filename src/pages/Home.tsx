@@ -546,9 +546,12 @@ export default function Home() {
                                   <div className="min-w-0 flex-1 pr-2">
                                     <div className="text-sm text-star-dust-200 font-medium leading-snug line-clamp-2">{meal.name}</div>
                                   </div>
-                                  <div className="w-2 h-2 rounded-full shrink-0 mt-1" style={{
-                                    backgroundColor: meal.onDiet || meal.on_diet === 1 ? 'rgb(34 197 94)' : 'rgb(239 68 68)'
-                                  }}></div>
+                                  <div className={`text-xs px-1.5 py-0.5 rounded-sm ${meal.onDiet || meal.on_diet === 1
+                                    ? 'bg-green-900/60 text-green-300'
+                                    : 'bg-red-900/60 text-red-300'
+                                    }`}>
+                                    {meal.onDiet || meal.on_diet === 1 ? 'Na dieta' : 'Fora'}
+                                  </div>
                                 </div>
 
                                 <div className="text-xs text-star-dust-400 line-clamp-2 mb-2">{meal.description}</div>
@@ -679,7 +682,10 @@ export default function Home() {
                                     <div className="flex-1">
                                       <div className="flex items-center gap-2">
                                         <div className="text-star-dust-200 font-medium">{meal.name}</div>
-                                        <div className={`w-2 h-2 rounded-full ${meal.onDiet ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                                        <div className={`text-xs px-1.5 py-0.5 rounded-sm ${meal.onDiet ? 'bg-green-900/60 text-green-300' : 'bg-red-900/60 text-red-300'
+                                          }`}>
+                                          {meal.onDiet ? 'Na dieta' : 'Fora'}
+                                        </div>
                                       </div>
                                       <p className="text-star-dust-400 text-sm mt-1">{meal.description}</p>
                                       <div className="flex items-center gap-4 mt-2 text-xs text-star-dust-400">
@@ -697,11 +703,6 @@ export default function Home() {
                                             {meal.calories} kcal
                                           </div>
                                         )}
-                                        <div className="flex items-center gap-1">
-                                          <span className={`${meal.onDiet ? 'text-green-500' : 'text-red-500'}`}>
-                                            {meal.onDiet ? 'Na dieta' : 'Fora da dieta'}
-                                          </span>
-                                        </div>
                                       </div>
                                     </div>
                                     <div className="flex gap-2">
@@ -844,14 +845,16 @@ export default function Home() {
                               <div className="mt-auto mb-1 flex flex-col gap-1 items-center">
                                 {onDietCount > 0 && (
                                   <div className="flex items-center gap-1">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
-                                    <span className="text-xs text-green-500/80">{onDietCount}</span>
+                                    <span className="text-xs bg-green-900/70 text-green-300 px-1 py-0.5 rounded-sm">
+                                      {onDietCount} na dieta
+                                    </span>
                                   </div>
                                 )}
                                 {offDietCount > 0 && (
                                   <div className="flex items-center gap-1">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
-                                    <span className="text-xs text-red-500/80">{offDietCount}</span>
+                                    <span className="text-xs bg-red-900/70 text-red-300 px-1 py-0.5 rounded-sm">
+                                      {offDietCount} fora
+                                    </span>
                                   </div>
                                 )}
                               </div>
@@ -864,12 +867,10 @@ export default function Home() {
 
                   <div className="flex justify-center gap-6 mt-4 text-xs text-star-dust-400">
                     <div className="flex items-center gap-1">
-                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                      <span>Na dieta</span>
+                      <span className="px-1.5 py-0.5 bg-green-900/60 text-green-300 rounded-sm">Na dieta</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                      <span>Fora da dieta</span>
+                      <span className="px-1.5 py-0.5 bg-red-900/60 text-red-300 rounded-sm">Fora da dieta</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <div className="w-2 h-2 rounded-full bg-blue-500"></div>
