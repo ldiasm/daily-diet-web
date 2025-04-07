@@ -546,11 +546,20 @@ export default function Home() {
                                   <div className="min-w-0 flex-1 pr-2">
                                     <div className="text-sm text-star-dust-200 font-medium leading-snug line-clamp-2">{meal.name}</div>
                                   </div>
-                                  <div className={`text-xs px-1.5 rounded-sm font-medium ${meal.onDiet || meal.on_diet === 1
-                                    ? 'bg-green-900/40 text-green-400'
-                                    : 'bg-red-900/40 text-red-400'
+                                  <div className={`text-xs px-1.5 rounded-sm font-medium flex items-center ${meal.onDiet || meal.on_diet === 1
+                                    ? 'bg-green-900/30 text-green-400'
+                                    : 'bg-amber-900/30 text-amber-400'
                                     }`}>
-                                    {meal.onDiet || meal.on_diet === 1 ? '✓' : '✗'}
+                                    {meal.onDiet || meal.on_diet === 1 ? (
+                                      <svg className="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                      </svg>
+                                    ) : (
+                                      <svg className="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                      </svg>
+                                    )}
+                                    <span>{meal.onDiet || meal.on_diet === 1 ? 'Ok' : 'Livre'}</span>
                                   </div>
                                 </div>
 
@@ -682,9 +691,18 @@ export default function Home() {
                                     <div className="flex-1">
                                       <div className="flex items-center gap-2">
                                         <div className="text-star-dust-200 font-medium">{meal.name}</div>
-                                        <div className={`text-xs px-1.5 rounded-sm font-medium ${meal.onDiet ? 'bg-green-900/40 text-green-400' : 'bg-red-900/40 text-red-400'
+                                        <div className={`text-xs px-1.5 rounded-sm font-medium flex items-center ${meal.onDiet ? 'bg-green-900/30 text-green-400' : 'bg-amber-900/30 text-amber-400'
                                           }`}>
-                                          {meal.onDiet ? '✓' : '✗'}
+                                          {meal.onDiet ? (
+                                            <svg className="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                            </svg>
+                                          ) : (
+                                            <svg className="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                            </svg>
+                                          )}
+                                          <span>{meal.onDiet ? 'Ok' : 'Livre'}</span>
                                         </div>
                                       </div>
                                       <p className="text-star-dust-400 text-sm mt-1">{meal.description}</p>
@@ -845,15 +863,21 @@ export default function Home() {
                               <div className="mt-auto mb-1 flex flex-col gap-1 items-center">
                                 {onDietCount > 0 && (
                                   <div className="flex items-center gap-1">
-                                    <span className="text-xs bg-green-900/40 text-green-400 px-1 rounded-sm">
-                                      {onDietCount}✓
+                                    <span className="text-xs bg-green-900/30 text-green-400 px-1 rounded-sm flex items-center">
+                                      <svg className="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                      </svg>
+                                      {onDietCount}
                                     </span>
                                   </div>
                                 )}
                                 {offDietCount > 0 && (
                                   <div className="flex items-center gap-1">
-                                    <span className="text-xs bg-red-900/40 text-red-400 px-1 rounded-sm">
-                                      {offDietCount}✗
+                                    <span className="text-xs bg-amber-900/30 text-amber-400 px-1 rounded-sm flex items-center">
+                                      <svg className="w-3 h-3 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                      </svg>
+                                      {offDietCount}
                                     </span>
                                   </div>
                                 )}
@@ -867,10 +891,20 @@ export default function Home() {
 
                   <div className="flex justify-center gap-6 mt-4 text-xs text-star-dust-400">
                     <div className="flex items-center gap-1">
-                      <span className="px-1.5 py-0.5 bg-green-900/40 text-green-400 rounded-sm font-medium">✓ Adequado</span>
+                      <span className="px-1.5 py-0.5 bg-green-900/30 text-green-400 rounded-sm font-medium flex items-center">
+                        <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        Adequado
+                      </span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <span className="px-1.5 py-0.5 bg-red-900/40 text-red-400 rounded-sm font-medium">✗ Inadequado</span>
+                      <span className="px-1.5 py-0.5 bg-amber-900/30 text-amber-400 rounded-sm font-medium flex items-center">
+                        <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        Livre
+                      </span>
                     </div>
                     <div className="flex items-center gap-1">
                       <div className="w-2 h-2 rounded-full bg-blue-500"></div>
