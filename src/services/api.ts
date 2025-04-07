@@ -12,6 +12,10 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // Se for um erro 401, pode ser que o cookie de sessão tenha expirado
+    if (error.response && error.response.status === 401) {
+      console.error('Erro de autenticação:', error.response.data)
+    }
     return Promise.reject(error)
   }
 )

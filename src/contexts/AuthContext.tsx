@@ -51,11 +51,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           email: userData.email,
           photoUrl: userData.photo_url,
         });
+      } else {
+        // Se não houver usuários, definir como null
+        setUser(null);
       }
     } catch (error) {
       console.error('Erro ao carregar usuário:', error);
+      // Se houver erro 401, o usuário não está autenticado
+      if (error instanceof Error && 'response' in error &&
+        typeof error.response === 'object' &&
+        error.response !== null &&
+        'status' in error.response &&
+        error.response.status === 401) {
+        setUser(null);
+      }
     } finally {
-      setIsLoading(false);
+      // Garantir que isLoading seja definido como false após um tempo razoável
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
     }
   }, []);
 
@@ -86,7 +100,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       throw new Error('Erro ao fazer login. Tente novamente.');
     } finally {
-      setIsLoading(false);
+      // Garantir que isLoading seja definido como false após um tempo razoável
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
     }
   }, []);
 
@@ -111,27 +128,44 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         email: userDataResponse.email,
         photoUrl: userDataResponse.photo_url,
       });
-
-      // Aguardar um momento para garantir que os dados do usuário sejam carregados
-      await new Promise(resolve => setTimeout(resolve, 500));
     } catch (error) {
       if (error instanceof Error) {
         throw error;
       }
       throw new Error('Erro ao criar conta. Tente novamente.');
     } finally {
-      setIsLoading(false);
+      // Garantir que isLoading seja definido como false após um tempo razoável
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
     }
   }, []);
 
-  const signOut = useCallback(() => {
-    setUser(null);
+  const signOut = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      await api.post('/users/logout');
+
+      // Definir o usuário como null antes de definir isLoading como false
+      setUser(null);
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+      // Mesmo com erro, definir o usuário como null
+      setUser(null);
+    } finally {
+      // Garantir que isLoading seja definido como false após um tempo razoável
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
+    }
   }, []);
 
   const deleteAccount = useCallback(async () => {
     try {
       setIsLoading(true);
       await api.delete('/users');
+
+      // Definir o usuário como null antes de definir isLoading como false
       setUser(null);
     } catch (error) {
       if (error instanceof Error) {
@@ -139,7 +173,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       throw new Error('Erro ao deletar conta. Tente novamente.');
     } finally {
-      setIsLoading(false);
+      // Garantir que isLoading seja definido como false após um tempo razoável
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500);
     }
   }, []);
 
