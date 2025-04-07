@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { format, startOfWeek, addDays, isSameDay, addWeeks, parse, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { generateWeeklyMeals } from '../utils/mockData';
+import DashboardTab from '../components/DashboardTab';
 
 interface Meal {
   id: string;
@@ -34,7 +35,7 @@ export default function Home() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState<'grid' | 'list' | 'calendar'>('grid');
+  const [activeTab, setActiveTab] = useState<'grid' | 'list' | 'calendar' | 'dashboard'>('grid');
   const [meals, setMeals] = useState<Meal[]>([]);
   const [weeklyMeals, setWeeklyMeals] = useState<DailyMeals[]>([]);
   const [showAddMealModal, setShowAddMealModal] = useState(false);
@@ -408,33 +409,42 @@ export default function Home() {
         </div>
 
         <div className="bg-star-dust-900 rounded-lg p-4 shadow-lg mb-6">
-          <div className="flex space-x-4 mb-6 border-b border-star-dust-700">
+          <div className="flex p-1 bg-star-dust-850 rounded-lg shadow-sm">
             <button
+              className={`flex-1 px-3 py-1.5 rounded-md text-sm font-medium ${activeTab === 'grid'
+                ? 'bg-star-dust-800 text-white'
+                : 'text-star-dust-300 hover:bg-star-dust-800/50 hover:text-white'
+                }`}
               onClick={() => setActiveTab('grid')}
-              className={`px-4 py-2 text-sm font-medium ${activeTab === 'grid'
-                ? 'text-blue-500 border-b-2 border-blue-500'
-                : 'text-star-dust-400 hover:text-star-dust-300'
-                }`}
             >
-              Visualização em Grid
+              Grid
             </button>
             <button
+              className={`flex-1 px-3 py-1.5 rounded-md text-sm font-medium ${activeTab === 'list'
+                ? 'bg-star-dust-800 text-white'
+                : 'text-star-dust-300 hover:bg-star-dust-800/50 hover:text-white'
+                }`}
               onClick={() => setActiveTab('list')}
-              className={`px-4 py-2 text-sm font-medium ${activeTab === 'list'
-                ? 'text-blue-500 border-b-2 border-blue-500'
-                : 'text-star-dust-400 hover:text-star-dust-300'
-                }`}
             >
-              Lista de Refeições
+              Lista
             </button>
             <button
-              onClick={() => setActiveTab('calendar')}
-              className={`px-4 py-2 text-sm font-medium ${activeTab === 'calendar'
-                ? 'text-blue-500 border-b-2 border-blue-500'
-                : 'text-star-dust-400 hover:text-star-dust-300'
+              className={`flex-1 px-3 py-1.5 rounded-md text-sm font-medium ${activeTab === 'calendar'
+                ? 'bg-star-dust-800 text-white'
+                : 'text-star-dust-300 hover:bg-star-dust-800/50 hover:text-white'
                 }`}
+              onClick={() => setActiveTab('calendar')}
             >
               Calendário
+            </button>
+            <button
+              className={`flex-1 px-3 py-1.5 rounded-md text-sm font-medium ${activeTab === 'dashboard'
+                ? 'bg-star-dust-800 text-white'
+                : 'text-star-dust-300 hover:bg-star-dust-800/50 hover:text-white'
+                }`}
+              onClick={() => setActiveTab('dashboard')}
+            >
+              Dashboard
             </button>
           </div>
 
@@ -909,6 +919,10 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+            )}
+
+            {activeTab === 'dashboard' && (
+              <DashboardTab meals={meals} loadMealsForWeek={loadMealsForWeek} />
             )}
           </div>
         </div>
