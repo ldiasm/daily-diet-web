@@ -80,6 +80,14 @@ export default function Login() {
           <p className="mt-2 text-center text-sm text-star-dust-400">
             {isCreatingAccount ? 'Crie sua conta para começar' : 'Entre com sua conta'}
           </p>
+
+          <div className="mt-4 p-3 bg-amber-900/30 border border-amber-800 rounded-md">
+            <p className="text-amber-300 text-sm text-center font-medium">⚠️ Ambiente de Desenvolvimento</p>
+            <p className="text-amber-400/80 text-xs text-center mt-1">
+              Por favor, NÃO utilize dados reais ou senhas que você usa em outros serviços.
+              Este é apenas um ambiente de testes e desenvolvimento.
+            </p>
+          </div>
         </div>
 
         <div className="flex justify-center space-x-4 mb-6">
