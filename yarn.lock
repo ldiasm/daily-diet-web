@@ -1019,7 +1019,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:^1.6.7":
+"axios@npm:latest":
   version: 1.8.4
   resolution: "axios@npm:1.8.4"
   dependencies:
@@ -1354,7 +1354,7 @@ __metadata:
     "@types/react-dom": ^18.2.19
     "@vitejs/plugin-react": ^4.2.1
     autoprefixer: 10.4.17
-    axios: ^1.6.7
+    axios: latest
     date-fns: ^4.1.0
     eslint: ^8.56.0
     eslint-plugin-react-hooks: ^4.6.0
