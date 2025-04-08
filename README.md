@@ -209,7 +209,3 @@ function LoginPage() {
 ## 📄 Licença
 
 Este projeto está sob a licença MIT - veja o arquivo LICENSE para detalhes.
-
-## 📞 Contato
-
-Lucas Dias - [@ldiasm](https://github.com/ldiasm)
