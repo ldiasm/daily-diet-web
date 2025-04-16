@@ -7,6 +7,9 @@ interface User {
   lastName: string;
   email: string;
   photoUrl?: string;
+  weight?: number;
+  height?: number;
+  goal?: string;
 }
 
 interface AuthContextData {
@@ -50,6 +53,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           lastName: userData.last_name,
           email: userData.email,
           photoUrl: userData.photo_url,
+          weight: userData.weight,
+          height: userData.height,
+          goal: userData.goal,
         });
       } else {
         // Se não houver usuários, definir como null
@@ -81,19 +87,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signIn = useCallback(async ({ email, password }: SignInCredentials) => {
     try {
       setIsLoading(true);
-      const response = await api.post('/users/login', {
+      await api.post('/users/login', {
         email,
         password,
       });
 
-      const userData = response.data.user;
-      setUser({
-        id: userData.id,
-        firstName: userData.first_name,
-        lastName: userData.last_name,
-        email: userData.email,
-        photoUrl: userData.photo_url,
-      });
+      // Carregar os dados do usuário após o login
+      await loadUser();
     } catch (error) {
       if (error instanceof Error) {
         throw error;
@@ -105,7 +105,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsLoading(false);
       }, 500);
     }
-  }, []);
+  }, [loadUser]);
 
   const signUp = useCallback(async ({ email, password, firstName, lastName, photoUrl }: SignUpCredentials) => {
     try {
@@ -118,16 +118,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         ...(photoUrl && { photoUrl }),
       };
 
-      const response = await api.post('/users', userData);
+      await api.post('/users', userData);
 
-      const userDataResponse = response.data.user;
-      setUser({
-        id: userDataResponse.id,
-        firstName: userDataResponse.first_name,
-        lastName: userDataResponse.last_name,
-        email: userDataResponse.email,
-        photoUrl: userDataResponse.photo_url,
-      });
+      // Fazer login após o cadastro
+      await signIn({ email, password });
     } catch (error) {
       if (error instanceof Error) {
         throw error;
@@ -139,7 +133,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsLoading(false);
       }, 500);
     }
-  }, []);
+  }, [signIn]);
 
   const signOut = useCallback(async () => {
     try {

@@ -6,6 +6,51 @@ import { ptBR } from 'date-fns/locale';
 import { generateWeeklyMeals } from '../utils/mockData';
 import DashboardTab from '../components/DashboardTab';
 
+// Configuração da API
+const API_BASE_URL = `${import.meta.env.VITE_API_URL}/${import.meta.env.VITE_API_VERSION}`;
+const API_TIMEOUT = 10000; // 10 segundos
+
+// Headers comuns para todas as requisições
+const commonHeaders = {
+  'Content-Type': 'application/json',
+  'Accept': 'application/json',
+};
+
+// Função auxiliar para fazer requisições com timeout
+const fetchWithTimeout = async (url: string, options: RequestInit = {}) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+      credentials: 'include',
+      headers: {
+        ...commonHeaders,
+        ...options.headers,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+    }
+
+    return response;
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.name === 'AbortError') {
+        throw new Error('A requisição demorou muito para responder. Por favor, tente novamente.');
+      }
+      throw error;
+    }
+    throw new Error('Ocorreu um erro inesperado. Por favor, tente novamente.');
+  } finally {
+    clearTimeout(timeoutId);
+  }
+};
+
 interface Meal {
   id: string;
   name: string;
@@ -89,12 +134,8 @@ export default function Home() {
         return;
       }
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/meals`, {
+      const response = await fetchWithTimeout(`${API_BASE_URL}/meals`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
         body: JSON.stringify({
           name: newMeal.name,
           description: newMeal.description,
@@ -124,7 +165,7 @@ export default function Home() {
       await loadMealsForWeek();
     } catch (error) {
       console.error('Error adding meal:', error);
-      alert('Erro ao adicionar refeição. Tente novamente.');
+      alert(error instanceof Error ? error.message : 'Erro ao adicionar refeição. Tente novamente.');
     }
   };
 
@@ -177,12 +218,8 @@ export default function Home() {
         return;
       }
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/meals/${selectedMeal.id}`, {
+      const response = await fetchWithTimeout(`${API_BASE_URL}/meals/${selectedMeal.id}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
         body: JSON.stringify({
           name: newMeal.name,
           description: newMeal.description,
@@ -205,16 +242,14 @@ export default function Home() {
       await loadMealsForWeek();
     } catch (error) {
       console.error('Error updating meal:', error);
-      alert('Erro ao atualizar refeição. Tente novamente.');
+      alert(error instanceof Error ? error.message : 'Erro ao atualizar refeição. Tente novamente.');
     }
   };
 
   const handleDeleteMeal = async (meal: Meal) => {
     try {
-      // Deleta a refeição na API
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/meals/${meal.id}`, {
+      const response = await fetchWithTimeout(`${API_BASE_URL}/meals/${meal.id}`, {
         method: 'DELETE',
-        credentials: 'include',
       });
 
       if (!response.ok) {
@@ -233,7 +268,7 @@ export default function Home() {
       await loadMealsForWeek();
     } catch (error) {
       console.error('Erro ao deletar refeição:', error);
-      alert('Erro ao deletar refeição. Tente novamente.');
+      alert(error instanceof Error ? error.message : 'Erro ao deletar refeição. Tente novamente.');
     }
   };
 
@@ -256,14 +291,7 @@ export default function Home() {
   const loadMealsForWeek = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/meals`, {
-        credentials: 'include',
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to load meals');
-      }
-
+      const response = await fetchWithTimeout(`${API_BASE_URL}/meals`);
       const data = await response.json();
 
       // Verifica se data.meals é um array

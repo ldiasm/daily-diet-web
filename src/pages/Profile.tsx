@@ -1,26 +1,56 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import api from '../services/api';
 
 interface UserProfile {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  weight: number;
-  height: number;
-  goal: string;
+  weight?: number;
+  height?: number;
+  goal?: string;
 }
 
 export default function Profile() {
+  const { user, signOut } = useAuth();
   const [profile, setProfile] = useState<UserProfile>({
-    name: 'Usuário',
-    email: 'usuario@email.com',
-    weight: 70,
-    height: 170,
+    firstName: '',
+    lastName: '',
+    email: '',
+    weight: 0,
+    height: 0,
     goal: 'Manter o peso',
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (user) {
+      setProfile({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        weight: 0,
+        height: 0,
+        goal: 'Manter o peso',
+      });
+    }
+  }, [user]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implementar atualização do perfil
-    alert('Perfil atualizado com sucesso!');
+    try {
+      await api.put('/users/profile', {
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        weight: profile.weight,
+        height: profile.height,
+        goal: profile.goal,
+      });
+      // Recarregar a página para atualizar os dados
+      window.location.reload();
+    } catch (error) {
+      console.error('Erro ao atualizar perfil:', error);
+      alert('Erro ao atualizar perfil. Tente novamente.');
+    }
   };
 
   return (
@@ -33,8 +63,18 @@ export default function Profile() {
             <label className="block text-sm font-medium text-gray-300">Nome</label>
             <input
               type="text"
-              value={profile.name}
-              onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+              value={profile.firstName}
+              onChange={(e) => setProfile({ ...profile, firstName: e.target.value })}
+              className="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-white placeholder-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-300">Sobrenome</label>
+            <input
+              type="text"
+              value={profile.lastName}
+              onChange={(e) => setProfile({ ...profile, lastName: e.target.value })}
               className="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-white placeholder-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             />
           </div>
@@ -44,7 +84,7 @@ export default function Profile() {
             <input
               type="email"
               value={profile.email}
-              onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+              disabled
               className="mt-1 block w-full rounded-md border-gray-600 bg-gray-700 text-white placeholder-gray-400 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             />
           </div>
@@ -84,12 +124,19 @@ export default function Profile() {
             </select>
           </div>
 
-          <div>
+          <div className="flex space-x-4">
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             >
               Salvar Alterações
+            </button>
+            <button
+              type="button"
+              onClick={signOut}
+              className="flex-1 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            >
+              Sair
             </button>
           </div>
         </form>
